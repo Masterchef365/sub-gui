@@ -1,12 +1,13 @@
-use eframe::egui::{self, Context, FullOutput, RawInput};
+use eframe::egui::{self, Context, FullOutput, RawInput, DragValue};
 pub struct SubGui {
     ctx: Context,
+    frunge: f32,
 }
 
 impl SubGui {
     pub fn new() -> Self {
         let ctx = Context::default();
-        Self { ctx }
+        Self { ctx, frunge: 0.0 }
     }
 
     pub fn run(&mut self, raw_input: RawInput) -> FullOutput {
@@ -16,6 +17,7 @@ impl SubGui {
                 if ui.button("Click me").clicked() {
                     println!("I've been clicked aaaa");
                 }
+                ui.add(DragValue::new(&mut self.frunge));
             });
         })
     }
