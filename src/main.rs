@@ -1,4 +1,5 @@
 use eframe::{egui::{self, InputState, RawInput, Sense, Event}, epaint::{Rect, ClippedShape}};
+use egui::FullOutput;
 use sub::SubGui;
 mod sub;
 
@@ -32,9 +33,11 @@ impl eframe::App for MyEguiApp {
 
             let (rect, response) = ui.allocate_exact_size(ui.available_size(), Sense::click_and_drag());
 
-            let mut full_output = ui.ctx().input(|input_state| {
+            let mut full_output: FullOutput = ui.ctx().input(|input_state| {
                 let raw_input = convert_subwindow_input(input_state, rect);
-                self.sub.run(raw_input)
+                let input_bytes = bincode::serialize(&raw_input).unwrap();
+                let output_bytes = self.sub.run(&input_bytes);
+                bincode::deserialize(&output_bytes).unwrap()
             });
 
             for ClippedShape(_, shape) in &mut full_output.shapes {

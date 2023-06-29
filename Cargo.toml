@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 #eframe = "0.21.3"
 eframe = { path = "C:\\Users\\dunca\\Downloads\\egui\\crates\\eframe" }
+egui = { path = "C:\\Users\\dunca\\Downloads\\egui\\crates\\egui", features = ["serde"] }
+bincode = "1.3.3"
