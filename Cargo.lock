@@ -682,6 +682,7 @@ checksum = "9ea835d29036a4087793836fa931b08837ad5e957da9e23886b29586fb9b6650"
 [[package]]
 name = "ecolor"
 version = "0.22.0"
+source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed63cf9509a9caaf6c0af4bd7524c695b7fd"
 dependencies = [
  "bytemuck",
  "serde",
@@ -690,6 +691,7 @@ dependencies = [
 [[package]]
 name = "eframe"
 version = "0.22.0"
+source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed63cf9509a9caaf6c0af4bd7524c695b7fd"
 dependencies = [
  "bytemuck",
  "cocoa",
@@ -716,6 +718,7 @@ dependencies = [
 [[package]]
 name = "egui"
 version = "0.22.0"
+source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed63cf9509a9caaf6c0af4bd7524c695b7fd"
 dependencies = [
  "accesskit",
  "ahash",
@@ -728,6 +731,7 @@ dependencies = [
 [[package]]
 name = "egui-winit"
 version = "0.22.0"
+source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed63cf9509a9caaf6c0af4bd7524c695b7fd"
 dependencies = [
  "accesskit_winit",
  "arboard",
@@ -743,6 +747,7 @@ dependencies = [
 [[package]]
 name = "egui_glow"
 version = "0.22.0"
+source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed63cf9509a9caaf6c0af4bd7524c695b7fd"
 dependencies = [
  "bytemuck",
  "egui",
@@ -756,6 +761,7 @@ dependencies = [
 [[package]]
 name = "emath"
 version = "0.22.0"
+source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed63cf9509a9caaf6c0af4bd7524c695b7fd"
 dependencies = [
  "bytemuck",
  "serde",
@@ -796,6 +802,7 @@ dependencies = [
 [[package]]
 name = "epaint"
 version = "0.22.0"
+source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed63cf9509a9caaf6c0af4bd7524c695b7fd"
 dependencies = [
  "ab_glyph",
  "ahash",
