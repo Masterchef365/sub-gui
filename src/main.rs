@@ -29,6 +29,8 @@ impl MyEguiApp {
 impl eframe::App for MyEguiApp {
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
+            ctx.request_repaint();
+
             ui.heading("Boring host heading...");
 
             let (rect, response) = ui.allocate_exact_size(ui.available_size(), Sense::click_and_drag());

@@ -745,6 +745,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "egui_demo_lib"
+version = "0.22.0"
+source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed63cf9509a9caaf6c0af4bd7524c695b7fd"
+dependencies = [
+ "egui",
+ "egui_extras",
+ "enum-map",
+ "log",
+ "unicode_names2",
+]
+
+[[package]]
+name = "egui_extras"
+version = "0.22.0"
+source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed63cf9509a9caaf6c0af4bd7524c695b7fd"
+dependencies = [
+ "egui",
+ "serde",
+]
+
+[[package]]
 name = "egui_glow"
 version = "0.22.0"
 source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed63cf9509a9caaf6c0af4bd7524c695b7fd"
@@ -765,6 +786,27 @@ source = "git+https://github.com/Masterchef365/egui.git?branch=more-serde#f71bed
 dependencies = [
  "bytemuck",
  "serde",
+]
+
+[[package]]
+name = "enum-map"
+version = "2.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "988f0d17a0fa38291e5f41f71ea8d46a5d5497b9054d5a759fae2cbb819f2356"
+dependencies = [
+ "enum-map-derive",
+ "serde",
+]
+
+[[package]]
+name = "enum-map-derive"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2a4da76b3b6116d758c7ba93f7ec6a35d2e2cf24feda76c6e38a375f4d5c59f2"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
 ]
 
 [[package]]
@@ -1939,6 +1981,7 @@ dependencies = [
  "bincode",
  "eframe",
  "egui",
+ "egui_demo_lib",
 ]
 
 [[package]]
@@ -2127,6 +2170,12 @@ checksum = "5c5713f0fc4b5db668a2ac63cdb7bb4469d8c9fed047b1d0292cc7b0ce2ba921"
 dependencies = [
  "tinyvec",
 ]
+
+[[package]]
+name = "unicode_names2"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "446c96c6dd42604779487f0a981060717156648c1706aa1f464677f03c6cc059"
 
 [[package]]
 name = "url"
