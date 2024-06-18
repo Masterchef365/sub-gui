@@ -5,10 +5,13 @@ use egui::{ahash::HashSet, epaint::ClippedShape};
 use egui_demo_lib::DemoWindows;
 use quicklz::CompressionLevel;
 
+use crate::common::{self, Encoder};
+
 pub struct SubGui {
     ctx: Context,
     demo: DemoWindows,
     compression_level: quicklz::CompressionLevel,
+    encoder: common::Encoder,
     //last: HashSet<EqByHash<HashBySerialize<ClippedShape>>>,
 }
 
@@ -19,6 +22,7 @@ impl SubGui {
             ctx,
             demo: DemoWindows::default(),
             compression_level: quicklz::CompressionLevel::Lvl1,
+            encoder: Encoder::new(),
         } //, last: Default::default() }
     }
 
@@ -53,8 +57,15 @@ impl SubGui {
         //let last_len = self.last.len();
         //dbg!(last_len, count);
 
-        let uncompressed = bincode::serialize(&full_output).unwrap();
-        quicklz::compress(&uncompressed, self.compression_level)
+        //let uncompressed = bincode::serialize(&full_output).unwrap();
+
+        let updates = self.encoder.encode(&full_output);
+
+        let compressed = bincode::serialize(&updates).unwrap();
+
+        compressed
+
+        //quicklz::compress(&uncompressed, self.compression_level)
     }
 }
 

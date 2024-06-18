@@ -4,22 +4,26 @@ use std::collections::HashMap;
 
 use crate::hash_abuse::{EqByHash, HashBySerialize};
 
-enum UpdateData {
+#[derive(serde::Serialize, serde::Deserialize, Clone)]
+pub enum UpdateData {
     FullUpdate(FullOutput),
     /// Used to build a FullOutput on the other side
     Partial(FullOutput, Vec<PartialUpdate>),
 }
 
+#[derive(serde::Serialize, serde::Deserialize, Clone)]
 enum PartialUpdate {
     Reference(usize),
     Shape(ClippedShape),
 }
 
-struct Encoder {
+pub struct Encoder {
     memory: HashMap<EqByHash<HashBySerialize<ClippedShape>>, usize>,
+    pub interval: usize,
+    counter: usize,
 }
 
-struct Decoder {
+pub struct Decoder {
     memory: Option<FullOutput>,
 }
 
@@ -27,10 +31,23 @@ impl Encoder {
     pub fn new() -> Self {
         Self {
             memory: Default::default(),
+            interval: 0,
+            counter: 0,
         }
     }
 
-    pub fn encode(&mut self, data: &FullOutput, partial: bool) -> UpdateData {
+    pub fn encode(&mut self, data: &FullOutput) -> UpdateData {
+        let mut do_partial_update = !self.memory.is_empty();
+        self.counter += 1;
+        if self.counter > self.interval {
+            do_partial_update = false;
+            self.counter = 0;
+        }
+
+        self.encode_manual_partial(data, do_partial_update)
+    }
+
+    pub fn encode_manual_partial(&mut self, data: &FullOutput, partial: bool) -> UpdateData {
         if partial {
             let mut data = data.clone();
             let partial_updates = data
