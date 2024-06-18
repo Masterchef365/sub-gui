@@ -42,10 +42,10 @@ impl eframe::App for MyEguiApp {
                 bincode::deserialize(&output_bytes).unwrap()
             });
 
-            for ClippedShape(clip, shape) in &mut full_output.shapes {
+            for ClippedShape { clip_rect, shape } in &mut full_output.shapes {
                 let offset = rect.left_top().to_vec2();
                 shape.translate(offset);
-                ui.set_clip_rect(clip.translate(offset));
+                ui.set_clip_rect(clip_rect.translate(offset));
                 ui.painter().add(shape.clone());
             }
         });
