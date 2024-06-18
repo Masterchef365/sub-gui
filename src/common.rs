@@ -25,6 +25,7 @@ pub struct Encoder {
 
 pub struct Decoder {
     memory: Option<FullOutput>,
+    pub debug_mode: bool,
 }
 
 impl Encoder {
@@ -79,7 +80,7 @@ impl Encoder {
 
 impl Decoder {
     pub fn new() -> Self {
-        Self { memory: None }
+        Self { memory: None, debug_mode: false }
     }
 
     pub fn decode(&mut self, update: UpdateData) -> Option<FullOutput> {
@@ -90,12 +91,14 @@ impl Decoder {
             }
             UpdateData::Partial(mut upd, partials) => {
                 for part in partials {
-                    upd.shapes.push(match part {
-                        PartialUpdate::Shape(shape) => shape,
+                    match part {
+                        PartialUpdate::Shape(shape) => upd.shapes.push(shape),
                         PartialUpdate::Reference(index) => {
-                            self.memory.as_mut()?.shapes[index].clone()
+                            if !self.debug_mode {
+                                upd.shapes.push(self.memory.as_mut()?.shapes[index].clone());
+                            }
                         }
-                    });
+                    };
                 }
                 Some(upd)
             }

@@ -47,6 +47,8 @@ impl eframe::App for MyEguiApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             ctx.request_repaint();
 
+            ui.checkbox(&mut self.decode.debug_mode, "Debug mode");
+
             ui.heading("Boring host heading...");
 
             let (rect, response) =
