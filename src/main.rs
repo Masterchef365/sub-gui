@@ -71,6 +71,7 @@ impl eframe::App for MyEguiApp {
                 ui.label(format!("size: {comp_size}"));
                 ui.label(format!("speed {mbps} mbps"));
                 ui.label(format!("fps {fps} fps"));
+                ui.label(format!("num shapes {}", full_output.shapes.len()));
             });
 
             for ClippedShape { clip_rect, shape } in &mut full_output.shapes {
