@@ -21,4 +21,4 @@ eframe = { path = "../egui/crates/eframe" }
 egui = { path = "../egui/crates/egui", features = ["serde"] }
 egui_demo_lib = { path = "../egui/crates/egui_demo_lib" }
 serde = { version = "1", features = ["derive"] } 
-serde_json = "1"
+#serde_json = "1"

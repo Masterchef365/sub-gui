@@ -36,8 +36,7 @@ impl SubGui {
         let count = full_output.shapes.len();
         self.last = full_output.shapes.iter().map(|c| EqByHash(HashBySerialize(c.clone()))).collect();
 
-
-        println!("{}", serde_json::ser::to_string_pretty(&full_output).unwrap());
+        //println!("{}", serde_json::ser::to_string_pretty(&full_output).unwrap());
 
         let last_len = self.last.len();
         dbg!(last_len, count);
