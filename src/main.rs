@@ -4,8 +4,10 @@ use eframe::{
     egui::{self, Event, InputState, RawInput, Sense},
     epaint::{ClippedShape, Rect},
 };
-use egui::{FullOutput, ViewportBuilder};
+use egui::{DragValue, FullOutput, ViewportBuilder};
 use sub::SubGui;
+use common::Decoder;
+
 mod sub;
 
 mod common;
@@ -23,6 +25,7 @@ fn main() {
 struct MyEguiApp {
     sub: SubGui,
     last: Instant,
+    decode: Decoder,
 }
 
 impl MyEguiApp {
@@ -32,6 +35,7 @@ impl MyEguiApp {
         // Use the cc.gl (a glow::Context) to create graphics shaders and buffers that you can use
         // for e.g. egui::PaintCallback.
         Self {
+            decode: Decoder::new(),
             sub: SubGui::new(),
             last: Instant::now(),
         }
@@ -60,17 +64,25 @@ impl eframe::App for MyEguiApp {
                 let output_bytes = self.sub.run(&input_bytes);
 
                 comp_size = output_bytes.len();
-                let output_bytes =
-                    quicklz::decompress(&mut Cursor::new(&output_bytes), 1024_u32.pow(3)).unwrap();
-                let uncomp_size = output_bytes.len();
+
+                //let output_bytes =
+                    //quicklz::decompress(&mut Cursor::new(&output_bytes), 1024_u32.pow(3)).unwrap();
+
+
+
+                let deser = bincode::deserialize(&output_bytes).unwrap();
+
+                let full = self.decode.decode(deser)?;
+
+                let uncomp_size = bincode::serialized_size(&full).unwrap();
 
                 comp_ratio = uncomp_size as f32 / (comp_size as f32).max(1.0);
                 fps = 1. / self.last.elapsed().as_secs_f32();
                 bps = fps * comp_size as f32;
                 mbps = bps / 1000. / 1000.;
 
-                bincode::deserialize(&output_bytes).unwrap()
-            });
+                Some(full)
+            }).unwrap();
 
             egui::Window::new("stats").show(ui.ctx(), |ui| {
                 ui.label(format!("ratio: {comp_ratio}"));

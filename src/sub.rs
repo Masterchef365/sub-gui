@@ -31,6 +31,8 @@ impl SubGui {
         let full_output = self.ctx.run(raw_input, |ctx| {
             egui::SidePanel::left("leftpanel").show(ctx, |ui| {
                 ui.label("Compression");
+                ui.add(DragValue::new(&mut self.encoder.interval).prefix("Interval: "));
+                /*
                 ui.horizontal(|ui| {
                     ui.selectable_value(
                         &mut self.compression_level,
@@ -43,6 +45,7 @@ impl SubGui {
                         "Ludicrous",
                     );
                 });
+                */
             });
 
             ctx.request_repaint();
