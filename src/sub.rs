@@ -1,6 +1,6 @@
 use std::{hash::Hash, io::Write};
 
-use eframe::egui::{self, Context, FullOutput, RawInput, DragValue};
+use eframe::egui::{self, Context, DragValue, FullOutput, RawInput};
 use egui::{ahash::HashSet, epaint::ClippedShape};
 use egui_demo_lib::DemoWindows;
 use quicklz::CompressionLevel;
@@ -9,13 +9,17 @@ pub struct SubGui {
     ctx: Context,
     demo: DemoWindows,
     compression_level: quicklz::CompressionLevel,
-    last: HashSet<EqByHash<HashBySerialize<ClippedShape>>>,
+    //last: HashSet<EqByHash<HashBySerialize<ClippedShape>>>,
 }
 
 impl SubGui {
     pub fn new() -> Self {
         let ctx = Context::default();
-        Self { ctx, demo: DemoWindows::default(), compression_level: quicklz::CompressionLevel::Lvl1, last: Default::default() }
+        Self {
+            ctx,
+            demo: DemoWindows::default(),
+            compression_level: quicklz::CompressionLevel::Lvl1,
+        } //, last: Default::default() }
     }
 
     pub fn run(&mut self, input_bytes: &[u8]) -> Vec<u8> {
@@ -24,8 +28,16 @@ impl SubGui {
             egui::SidePanel::left("leftpanel").show(ctx, |ui| {
                 ui.label("Compression");
                 ui.horizontal(|ui| {
-                    ui.selectable_value(&mut self.compression_level, CompressionLevel::Lvl1, "Normal");
-                    ui.selectable_value(&mut self.compression_level, CompressionLevel::Lvl3, "Ludicrous");
+                    ui.selectable_value(
+                        &mut self.compression_level,
+                        CompressionLevel::Lvl1,
+                        "Normal",
+                    );
+                    ui.selectable_value(
+                        &mut self.compression_level,
+                        CompressionLevel::Lvl3,
+                        "Ludicrous",
+                    );
                 });
             });
 
@@ -34,19 +46,19 @@ impl SubGui {
         });
 
         let count = full_output.shapes.len();
-        self.last = full_output.shapes.iter().map(|c| EqByHash(HashBySerialize(c.clone()))).collect();
+        //self.last = full_output.shapes.iter().map(|c| EqByHash(HashBySerialize(c.clone()))).collect();
 
         //println!("{}", serde_json::ser::to_string_pretty(&full_output).unwrap());
 
-        let last_len = self.last.len();
-        dbg!(last_len, count);
+        //let last_len = self.last.len();
+        //dbg!(last_len, count);
 
         let uncompressed = bincode::serialize(&full_output).unwrap();
         quicklz::compress(&uncompressed, self.compression_level)
     }
 }
 
-
+/*
 #[derive(PartialEq, Eq)]
 struct HashBySerialize<T>(pub T);
 
@@ -87,3 +99,4 @@ impl<T: Hash> PartialEq<EqByHash<T>> for EqByHash<T> {
 }
 
 impl<T: Hash> Eq for EqByHash<T> {}
+*/

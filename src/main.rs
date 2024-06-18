@@ -8,6 +8,9 @@ use egui::{FullOutput, ViewportBuilder};
 use sub::SubGui;
 mod sub;
 
+mod common;
+mod hash_abuse;
+
 fn main() {
     let native_options = eframe::NativeOptions::default();
     eframe::run_native(
@@ -28,7 +31,10 @@ impl MyEguiApp {
         // Restore app state using cc.storage (requires the "persistence" feature).
         // Use the cc.gl (a glow::Context) to create graphics shaders and buffers that you can use
         // for e.g. egui::PaintCallback.
-        Self { sub: SubGui::new(), last: Instant::now(), }
+        Self {
+            sub: SubGui::new(),
+            last: Instant::now(),
+        }
     }
 }
 
@@ -58,7 +64,7 @@ impl eframe::App for MyEguiApp {
                     quicklz::decompress(&mut Cursor::new(&output_bytes), 1024_u32.pow(3)).unwrap();
                 let uncomp_size = output_bytes.len();
 
-                comp_ratio = uncomp_size as f32 / (comp_size as f32).max(1.0); 
+                comp_ratio = uncomp_size as f32 / (comp_size as f32).max(1.0);
                 fps = 1. / self.last.elapsed().as_secs_f32();
                 bps = fps * comp_size as f32;
                 mbps = bps / 1000. / 1000.;
