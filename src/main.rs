@@ -44,7 +44,7 @@ impl eframe::App for MyEguiApp {
 
             let mut comp_size = 1;
             let mut comp_ratio = 1.;
-            let mut fps = 1.;
+            let mut fps = 90.;
             let mut bps = 1.;
             let mut mbps = 1.;
 
@@ -70,6 +70,7 @@ impl eframe::App for MyEguiApp {
                 ui.label(format!("ratio: {comp_ratio}"));
                 ui.label(format!("size: {comp_size}"));
                 ui.label(format!("speed {mbps} mbps"));
+                ui.label(format!("fps {fps} fps"));
             });
 
             for ClippedShape { clip_rect, shape } in &mut full_output.shapes {
