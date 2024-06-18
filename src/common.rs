@@ -48,15 +48,40 @@ impl Encoder {
 
             UpdateData::Partial(data, partial_updates)
         } else {
+            self.memory.clear();
+
+            for (idx, shape) in data.shapes.iter().enumerate() {
+                self.memory
+                    .insert(EqByHash(HashBySerialize(shape.clone())), idx);
+            }
+
             UpdateData::FullUpdate(data.clone())
         }
     }
-
-    fn encode_partial(&self, data: &FullOutput) -> UpdateData {}
 }
 
 impl Decoder {
     pub fn new() -> Self {
         Self { memory: None }
+    }
+
+    pub fn decode(&mut self, update: UpdateData) -> Option<FullOutput> {
+        match update {
+            UpdateData::FullUpdate(full) => {
+                self.memory = Some(full.clone());
+                Some(full)
+            }
+            UpdateData::Partial(mut upd, partials) => {
+                for part in partials {
+                    upd.shapes.push(match part {
+                        PartialUpdate::Shape(shape) => shape,
+                        PartialUpdate::Reference(index) => {
+                            self.memory.as_mut()?.shapes[index].clone()
+                        }
+                    });
+                }
+                Some(upd)
+            }
+        }
     }
 }
