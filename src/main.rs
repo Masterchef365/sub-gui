@@ -1,4 +1,4 @@
-use std::io::Cursor;
+use std::{io::Cursor, time::Instant};
 
 use eframe::{
     egui::{self, Event, InputState, RawInput, Sense},
@@ -19,6 +19,7 @@ fn main() {
 
 struct MyEguiApp {
     sub: SubGui,
+    last: Instant,
 }
 
 impl MyEguiApp {
@@ -27,7 +28,7 @@ impl MyEguiApp {
         // Restore app state using cc.storage (requires the "persistence" feature).
         // Use the cc.gl (a glow::Context) to create graphics shaders and buffers that you can use
         // for e.g. egui::PaintCallback.
-        Self { sub: SubGui::new() }
+        Self { sub: SubGui::new(), last: Instant::now(), }
     }
 }
 
@@ -51,9 +52,12 @@ impl eframe::App for MyEguiApp {
                     quicklz::decompress(&mut Cursor::new(&output_bytes), 1024_u32.pow(3)).unwrap();
                 let uncomp_size = output_bytes.len();
 
-                let comp_ratio = comp_size as f32 / (uncomp_size as f32).max(1.0); 
-                dbg!(comp_size);
-                dbg!(comp_ratio);
+                let comp_ratio = uncomp_size as f32 / (comp_size as f32).max(1.0); 
+                let fps = 1. / self.last.elapsed().as_secs_f32();
+                let bps = fps * comp_size as f32;
+                let mbps = bps * 8. / 1000. / 1000.;
+
+                println!("ratio: {comp_ratio} size: {comp_size} speed {mbps} mbps");
 
                 bincode::deserialize(&output_bytes).unwrap()
             });
@@ -65,6 +69,8 @@ impl eframe::App for MyEguiApp {
                 ui.painter().add(shape.clone());
             }
         });
+
+        self.last = Instant::now();
     }
 }
 
