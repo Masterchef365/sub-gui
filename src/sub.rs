@@ -18,6 +18,7 @@ impl SubGui {
             self.demo.ui(ctx);
         });
 
-        bincode::serialize(&full_output).unwrap()
+        let uncompressed = bincode::serialize(&full_output).unwrap();
+        quicklz::compress(&uncompressed, quicklz::CompressionLevel::Lvl1)
     }
 }

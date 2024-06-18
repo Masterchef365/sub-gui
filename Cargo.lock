@@ -2405,6 +2405,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "quicklz"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "750eab265a26a0cd064f2a2b222bf172cc06d7a873e113e5f6d0118cc6e5fbb1"
+dependencies = [
+ "bit-vec",
+ "byteorder",
+ "thiserror",
+]
+
+[[package]]
 name = "quote"
 version = "1.0.36"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2755,6 +2766,7 @@ dependencies = [
  "eframe",
  "egui",
  "egui_demo_lib",
+ "quicklz",
 ]
 
 [[package]]
