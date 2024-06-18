@@ -4,7 +4,7 @@ use eframe::{
     egui::{self, Event, InputState, RawInput, Sense},
     epaint::{ClippedShape, Rect},
 };
-use egui::FullOutput;
+use egui::{FullOutput, ViewportBuilder};
 use sub::SubGui;
 mod sub;
 
@@ -42,24 +42,34 @@ impl eframe::App for MyEguiApp {
             let (rect, response) =
                 ui.allocate_exact_size(ui.available_size(), Sense::click_and_drag());
 
+            let mut comp_size = 1;
+            let mut comp_ratio = 1.;
+            let mut fps = 1.;
+            let mut bps = 1.;
+            let mut mbps = 1.;
+
             let mut full_output: FullOutput = ui.ctx().input(|input_state| {
                 let raw_input = convert_subwindow_input(input_state, rect);
                 let input_bytes = bincode::serialize(&raw_input).unwrap();
                 let output_bytes = self.sub.run(&input_bytes);
 
-                let comp_size = output_bytes.len();
+                comp_size = output_bytes.len();
                 let output_bytes =
                     quicklz::decompress(&mut Cursor::new(&output_bytes), 1024_u32.pow(3)).unwrap();
                 let uncomp_size = output_bytes.len();
 
-                let comp_ratio = uncomp_size as f32 / (comp_size as f32).max(1.0); 
-                let fps = 1. / self.last.elapsed().as_secs_f32();
-                let bps = fps * comp_size as f32;
-                let mbps = bps * 8. / 1000. / 1000.;
-
-                println!("ratio: {comp_ratio} size: {comp_size} speed {mbps} mbps");
+                comp_ratio = uncomp_size as f32 / (comp_size as f32).max(1.0); 
+                fps = 1. / self.last.elapsed().as_secs_f32();
+                bps = fps * comp_size as f32;
+                mbps = bps / 1000. / 1000.;
 
                 bincode::deserialize(&output_bytes).unwrap()
+            });
+
+            egui::Window::new("stats").show(ui.ctx(), |ui| {
+                ui.label(format!("ratio: {comp_ratio}"));
+                ui.label(format!("size: {comp_size}"));
+                ui.label(format!("speed {mbps} mbps"));
             });
 
             for ClippedShape { clip_rect, shape } in &mut full_output.shapes {
